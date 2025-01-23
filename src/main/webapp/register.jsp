@@ -53,6 +53,10 @@
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" name="confirmPassword" id="confirmPassword" required>
         </div>
+        <select name="role">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+        </select>
         <div>
             <button type="submit">Create Account</button>
         </div>

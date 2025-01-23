@@ -1,60 +1,71 @@
 package lk.ijse.ecommercewebapplication;
 
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import javax.sql.DataSource;
+
 import org.mindrot.jbcrypt.BCrypt;
+
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
-@WebServlet("/login")
+@WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/ecommerce";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Ijse@123";
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+    @Resource(name = "java:comp/env/jdbc/pool")
+    private DataSource dataSource;
 
-        try (Connection connection = ConnectionPool.getDataSource().getConnection()) {
-            String sql = "SELECT id, name, password, role FROM users WHERE email = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
-            if (rs.next()) {
-                String hashedPassword = rs.getString("password");
-                if (BCrypt.checkpw(password, hashedPassword)) {
-                    String role = rs.getString("role");
-                    HttpSession session = request.getSession();
-                    session.setAttribute("userId", rs.getInt("id"));
-                    session.setAttribute("userName", rs.getString("name"));
-                    session.setAttribute("role", role);
+        HttpSession session = req.getSession();
 
-                    // Redirect based on role
-                    if ("ADMIN".equalsIgnoreCase(role)) {
-                        response.sendRedirect("admin_dashboard.jsp");
+        try (Connection connection = dataSource.getConnection()) {  // Use injected DataSource
+            String sql = "SELECT * FROM users WHERE username = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, username);
+
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    String storedPassword = resultSet.getString("password");
+                    String role = resultSet.getString("role");
+
+                    if (BCrypt.checkpw(password, storedPassword)) {
+                        session.setAttribute("username", username);
+                        session.setAttribute("role", role);
+
+                        session.setAttribute("message", "Login successful! Welcome, " + username + ".");
+                        session.setAttribute("alertType", "success");
+
+                        if ("admin".equalsIgnoreCase(role)) {
+                            resp.sendRedirect("user");
+
+                        } else {
+                            resp.sendRedirect("home.jsp");
+                        }
                     } else {
-                        response.sendRedirect("home.jsp");
+                        session.setAttribute("message", "Invalid credentials, please try again.");
+                        session.setAttribute("alertType", "danger");
+                        resp.sendRedirect("index.jsp");
                     }
-                    return;
+                } else {
+                    session.setAttribute("message", "User not found.");
+                    session.setAttribute("alertType", "danger");
+                    resp.sendRedirect("index.jsp");
                 }
             }
-            request.setAttribute("errorMessage", "Invalid email or password.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Error logging in. Please try again.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            session.setAttribute("message", "Database error: " + e.getMessage());
+            session.setAttribute("alertType", "danger");
+            resp.sendRedirect("index.jsp");
         }
     }
-
 }
