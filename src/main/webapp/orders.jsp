@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: HI
-  Date: 1/22/2025
-  Time: 1:32 PM
+  Date: 1/24/2025
+  Time: 2:48 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Users</title>
+    <title>View All Orders  </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -99,38 +99,69 @@
         function toggleFields(action) {
             // Hide all fields initially
             document.getElementById("idField").style.display = "none";
-            document.getElementById("nameField").style.display = "none";
-            document.getElementById("passwordField").style.display = "none";
-            document.getElementById("roleField").style.display = "none";
+            document.getElementById("user_idField").style.display = "none";
+            document.getElementById("totalPriceField").style.display = "none";
+            document.getElementById("order_dateField").style.display = "none";
+            document.getElementById("statusField").style.display = "none";
 
 
             // Show fields based on action
-            if (action === "save" || action === "update") {
-                document.getElementById("nameField").style.display = "block";
-                document.getElementById("emailField").style.display = "block";
-                document.getElementById("passwordField").style.display = "block";
-                document.getElementById("roleField").style.display = "block";
+            if (action === "save") {
+                document.getElementById("idField").style.display = "block";
+                document.getElementById("user_idField").style.display = "block";
+                document.getElementById("totalPriceField").style.display = "block";
+                document.getElementById("order_dateField").style.display = "block";
+                document.getElementById("statusField").style.display = "block";
 
-
+                fetchNextProductId();
             }
             if (action === "delete" || action === "update") {
                 document.getElementById("idField").style.display = "block";
+                document.getElementById("user_idField").style.display = "block";
+                if (action === "update") {
+                    document.getElementById("totalPriceField").style.display = "block";
+                    document.getElementById("order_dateField").style.display = "block";
+                    document.getElementById("statusField").style.display = "block";
+                }
             }
         }
+        function fetchOrdersByName(user_id) {
+            if (!user_id) return;
+            fetch(`getOrdersByName?name=${user_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.querySelector('input[name="id"]').value = data.id || '';
+                        document.querySelector('input[name="user_id"]').value = data.user_id || '';
+                    }
+                })
+                .catch(error => console.error('Error fetching order details:', error));
+        }
+        function fetchNextProductId() {
+            fetch('getNextOrderId')
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.querySelector('input[name="id"]').value = data.nextId || '';
+                    }
+                })
+                .catch(error => console.error('Error fetching next order ID:', error));
+        }
+
     </script>
 </head>
 <body>
 <jsp:include page="navbar.jsp" />
 
-<h1>Register Management</h1>
-<form action="register" method="post">
+<h1> orders Management</h1>
+<form action="orders" method="post">
     <label>Select Operation:</label><br>
     <select name="action" onchange="toggleFields(this.value)" required>
         <option value="">--Select--</option>
         <option value="save">Save</option>
         <option value="delete">Delete</option>
         <option value="update">Update</option>
-        <option value="view">View All Users</option>
+        <option value="view">View All Orders</option>
     </select>
     <br><br>
 
@@ -138,23 +169,24 @@
         <label>ID:</label><br>
         <input type="text" name="id"><br><br>
     </div>
-    <div id="nameField" style="display: none;">
+    <div id="user_idField" style="display: none;">
+        <label>ID:</label><br>
+        <input type="text" name="user_id"><br><br>
+    </div>
+    <div id="total_priceField" style="display: none;">
         <label>Name:</label><br>
-        <input type="text" name="username"><br><br>
+        <input type="text" name="total_price"><br><br>
     </div>
-    <div id="emailField" style="display: none;">
-        <label>Email:</label><br>
-        <input type="text" name="email"><br><br>
+    <div id="order_dateField" style="display: none;">
+        <label>Description:</label><br>
+        <input type="text" name="order_date"><br><br>
     </div>
-    <div id="passwordField" style="display: none;">
-        <label>Password:</label><br>
-        <input type="text" name="password"><br><br>
+    <div id="statusField" style="display: none;">
+        <label>Description:</label><br>
+        <input type="text" name="status"><br><br>
     </div>
-    <div id="roleField" style="display: none;">
-        <label>Role:</label><br>
-        <input type="text" name="role"><br><br>
-    </div>
-     <button type="submit">Submit</button>
+
+    <button type="submit">Submit</button>
 </form>
 
 <!-- Message Display -->

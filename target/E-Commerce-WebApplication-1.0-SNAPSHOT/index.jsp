@@ -45,14 +45,27 @@
     }
 
     /* Carousel Styling */
-    .carousel-caption {
-      background: rgba(0, 0, 0, 0.5);
-      padding: 20px;
-      border-radius: 10px;
+    #carouselExampleCaptions {
+      height: 50vh;
+    }
+
+    .carousel-inner {
+      height: 100%;
     }
 
     .carousel-item img {
-      filter: brightness(0.8);
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      filter: brightness(0.9); /* Slight darkening for better text visibility */
+    }
+
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 8px;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     /* Hero Section */
@@ -159,6 +172,7 @@
     }
     .card {
       margin-bottom: 20px; /* Space between cards */
+
     }
 
 
@@ -166,9 +180,77 @@
 </head>
 <body>
 
-<jsp:include page="navbar.jsp" />
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.jsp">KIDDS</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <!-- Shop Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+          <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+            <li><a class="dropdown-item" href="product_list.jsp">All Products</a></li>
+          </ul>
+        </li>
+        <!-- Categories Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+          <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=electronics">Baby Items</a></li>
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=clothing">Toys</a></li>
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=home-kitchen">Clothing</a></li>
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=jewelry">Feeding</a></li>
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=beauty">Diapers</a></li>
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=baby">Nursery</a></li>
+            <li><a class="dropdown-item" href="categoryitem.jsp?category=women">Health & Safety</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- Search Form -->
+      <form class="d-flex me-3">
+        <input class="form-control me-2" type="search" placeholder="Search for products..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </form>
+      <!-- Login Button -->
+      <button type="button" class="btn btn-light login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+    </div>
+  </div>
+</nav>
 
-
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login to Your Account</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="login" method="post">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <button type="submit" class="btn btn-primary w-100"><a class="nav-link text-white" href="home.jsp">Login</a></button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <p class="text-center w-100">Don't have an account? <a href="register.jsp">Register now</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
@@ -183,7 +265,7 @@
   <div class="carousel-inner">
     <!-- Slide 1 -->
     <div class="carousel-item active">
-      <img src="assest/now%20trendy%20caro.png" class="d-block w-100" alt="Exclusive Deals">
+      <img src="assest/carousel.png" class="d-block w-100" alt="Exclusive Deals">
       <div class="carousel-caption d-md-block">
         <h5 class="text-uppercase fw-bold">What's New Now</h5>
         <p>Explore the latest arrivals and exclusive collections.</p>
@@ -192,16 +274,16 @@
     </div>
     <!-- Slide 2 -->
     <div class="carousel-item">
-      <img src="assest/shopping%20carousel.png" class="d-block w-100" alt="Holiday Specials">
+      <img src="assest/carousel%202.png" class="d-block w-100" alt="Holiday Specials">
       <div class="carousel-caption d-md-block">
-        <h5 class="text-uppercase fw-bold">Holiday Specials</h5>
+        <h5 class="text-uppercase fw-bold">Happy BABY</h5>
         <p>Grab the best deals this season and save big!</p>
         <a href="product_list.jsp" class="btn btn-light btn-lg">View Deals</a>
       </div>
     </div>
     <!-- Slide 3 -->
     <div class="carousel-item">
-      <img src="assest/caro%20girl%20jump.png" class="d-block w-100" alt="Top Sellers">
+      <img src="assest/carousel%203.png" class="d-block w-100" alt="Top Sellers">
       <div class="carousel-caption d-md-block">
         <h5 class="text-uppercase fw-bold">Top Sellers</h5>
         <p>Shop our most popular products now in stock!</p>
@@ -223,7 +305,7 @@
 
 <!-- Hero Section -->
 <section class="hero-section text-center text-white bg-dark py-5">
-  <h1>Welcome to Our E-Commerce Store</h1>
+  <h1>Welcome to Our KIDDS Store</h1>
   <p>Discover the best deals this holiday season!</p>
   <a href="home.jsp" class="btn btn-light btn-lg">Shop Now</a>
 </section>
@@ -233,57 +315,39 @@
   <h2 class="text-center mb-3">Shop by Category</h2>
   <div class="row text-center">
     <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=electronics">
-        <img src="assest/electronic.png" alt="Electronics" class="img-fluid">
-        <p>Electronics</p>
+      <a href="toys.jsp">
+        <img src="assest/toys.png" alt="toys" class="img-fluid">
+        <p>Toys</p>
       </a>
     </div>
     <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=clothing">
-        <img src="assest/clothes.png" alt="Clothing" class="img-fluid">
+      <a href="clothing.jsp">
+        <img src="assest/winter%20bby.png" alt="Clothing" class="img-fluid">
         <p>Clothing</p>
       </a>
     </div>
     <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=home-kitchen">
-        <img src="assest/kitchen.png" alt="Home & Kitchen" class="img-fluid">
-        <p>Home & Kitchen</p>
+      <a href="feeding.jsp">
+        <img src="assest/baby%20feeding.png" alt="feeding" class="img-fluid">
+        <p>Feeding</p>
       </a>
     </div>
     <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=jewelry">
-        <img src="assest/jewelry.png" alt="Jewelry" class="img-fluid">
-        <p>Jewelry & Accessories</p>
+      <a href="diapers.jsp">
+        <img src="assest/diapers4.png" alt="diapers" class="img-fluid">
+        <p>Diapers</p>
       </a>
     </div>
     <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=beauty">
-        <img src="assest/beauty.png" alt="Beauty & Health" class="img-fluid">
-        <p>Beauty & Health</p>
+      <a href="nursery.jsp">
+        <img src="assest/nursery.png" alt="nursery" class="img-fluid">
+        <p>Nursery</p>
       </a>
     </div>
     <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=baby">
-        <img src="assest/kids.png" alt="Baby" class="img-fluid">
-        <p>Baby Items</p>
-      </a>
-    </div>
-    <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=women">
-        <img src="assest/caro%20girl%20jump.png" alt="Women" class="img-fluid">
-        <p>Women</p>
-      </a>
-    </div>
-    <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=men">
-        <img src="assest/boy%20with%20hat.png" alt="Men" class="img-fluid">
-        <p>Men</p>
-      </a>
-    </div>
-    <div class="col-md-4 category-icon">
-      <a href="category.jsp?category=bags">
-        <img src="assest/clothes.png" alt="Bags" class="img-fluid">
-        <p>Bags</p>
+      <a href="health.jsp">
+        <img src="assest/safety.png" alt="health" class="img-fluid">
+        <p>Health & Safety</p>
       </a>
     </div>
   </div>
@@ -298,29 +362,19 @@
       <div class="card">
         <img src="assest/sale.png" class="card-img-top" alt="Deal 1">
         <div class="card-body">
-          <h5 class="card-title">Christmas Lights</h5>
+          <h5 class="card-title">Toys</h5>
           <p class="card-text">Up to 50% Off</p>
-          <a href="product_list.jsp?dealId=1" class="btn btn-primary">Shop Now</a>
+          <a href="toys.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card">
-        <img src="assest/back%20friday%20sale.png" class="card-img-top" alt="Deal 2">
+        <img src="assest/diapers2.png" class="card-img-top" alt="Deal 2">
         <div class="card-body">
           <h5 class="card-title">Black Friday</h5>
           <p class="card-text">Up to 50% Off</p>
-          <a href="product_list.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card">
-        <img src="assest/samsung%20ultra.png" class="card-img-top" alt="Deal 2">
-        <div class="card-body">
-          <h5 class="card-title">Mobiles</h5>
-          <p class="card-text">Up to 10% Off</p>
-          <a href="deal.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
+          <a href="health.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
@@ -328,53 +382,62 @@
       <div class="card">
         <img src="assest/clothes.png" class="card-img-top" alt="Deal 2">
         <div class="card-body">
+          <h5 class="card-title">Clothing</h5>
+          <p class="card-text">Up to 10% Off</p>
+          <a href="clothing.jsp" class="btn btn-primary">Shop Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <img src="assest/winter%20bby.png" class="card-img-top" alt="Deal 2">
+        <div class="card-body">
           <h5 class="card-title">winter clothes</h5>
           <p class="card-text">Up to 50% Off</p>
-          <a href="product_list.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
+          <a href="clothing.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card">
-        <img src="assest/watch.png" class="card-img-top" alt="Deal 2">
+        <img src="assest/feeding%20details.png" class="card-img-top" alt="Deal 2">
         <div class="card-body">
-          <h5 class="card-title">Ladies Watches</h5>
+          <h5 class="card-title">Feeding</h5>
           <p class="card-text">Up to 50% Off</p>
-          <a href="product_list.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
+          <a href="feeding.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card">
-        <img src="assest/back%20friday%20sale.png" class="card-img-top" alt="Deal 2">
+        <img src="assest/nursery.png" class="card-img-top" alt="Deal 2">
         <div class="card-body">
-          <h5 class="card-title">Black Friday</h5>
+          <h5 class="card-title">Nursery</h5>
           <p class="card-text">Up to 50% Off</p>
-          <a href="product_list.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
+          <a href="=nursery.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card">
-        <img src="assest/samsung%20ultra.png" class="card-img-top" alt="Deal 2">
+        <img src="assest/uilding%20blocks.png" class="card-img-top" alt="Deal 2">
         <div class="card-body">
-          <h5 class="card-title">Mobiles</h5>
+          <h5 class="card-title">Baby toy sets</h5>
           <p class="card-text">Up to 10% Off</p>
-          <a href="deal.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
+          <a href="toys.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card">
-        <img src="assest/back%20friday%20sale.png" class="card-img-top" alt="Deal 2">
+        <img src="assest/nursery3.png" class="card-img-top" alt="Deal 2">
         <div class="card-body">
-          <h5 class="card-title">Black Friday</h5>
+          <h5 class="card-title">Baby Crib</h5>
           <p class="card-text">Up to 50% Off</p>
-          <a href="product_list.jsp?dealId=2" class="btn btn-primary">Shop Now</a>
+          <a href="nursery.jsp" class="btn btn-primary">Shop Now</a>
         </div>
       </div>
     </div>
-    <!-- Add more deals as needed -->
   </div>
 </section>
 

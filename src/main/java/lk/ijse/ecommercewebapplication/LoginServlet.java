@@ -15,57 +15,48 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.io.IOException;
 import java.sql.*;
 
-@WebServlet(name = "LoginServlet", value = "/login")
-public class LoginServlet extends HttpServlet {
 
-    @Resource(name = "java:comp/env/jdbc/pool")
-    private DataSource dataSource;
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+    @WebServlet("/login")
+    public class LoginServlet extends HttpServlet {
 
-        HttpSession session = req.getSession();
+        @Resource(name = "java:comp/env/jdbc/pool")
+        private DataSource dataSource;
+        private static final String DB_URL = "jdbc:mysql://localhost:3306/ecommerce";
+        private static final String DB_USER = "root";
+        private static final String DB_PASSWORD = "password";
 
-        try (Connection connection = dataSource.getConnection()) {  // Use injected DataSource
-            String sql = "SELECT * FROM users WHERE username = ?";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, username);
+        @Override
+        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
 
-                ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next()) {
-                    String storedPassword = resultSet.getString("password");
-                    String role = resultSet.getString("role");
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+                String query = "SELECT * FROM users WHERE username = ?";
+                PreparedStatement ps = connection.prepareStatement(query);
+                ps.setString(1, username);
 
-                    if (BCrypt.checkpw(password, storedPassword)) {
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    String storedPasswordHash = rs.getString("password_hash");
+                    String role = rs.getString("role");
+
+                    // Verify the password using bcrypt
+                    if (BCrypt.checkpw(password, storedPasswordHash)) {
+                        // Successful login
+                        HttpSession session = request.getSession();
                         session.setAttribute("username", username);
                         session.setAttribute("role", role);
-
-                        session.setAttribute("message", "Login successful! Welcome, " + username + ".");
-                        session.setAttribute("alertType", "success");
-
-                        if ("admin".equalsIgnoreCase(role)) {
-                            resp.sendRedirect("user");
-
-                        } else {
-                            resp.sendRedirect("home.jsp");
-                        }
-                    } else {
-                        session.setAttribute("message", "Invalid credentials, please try again.");
-                        session.setAttribute("alertType", "danger");
-                        resp.sendRedirect("index.jsp");
+                        response.sendRedirect("index.jsp");
+                        return;
                     }
-                } else {
-                    session.setAttribute("message", "User not found.");
-                    session.setAttribute("alertType", "danger");
-                    resp.sendRedirect("index.jsp");
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            session.setAttribute("message", "Database error: " + e.getMessage());
-            session.setAttribute("alertType", "danger");
-            resp.sendRedirect("index.jsp");
+
+            // If login fails
+            response.sendRedirect("error.jsp");
         }
     }
-}

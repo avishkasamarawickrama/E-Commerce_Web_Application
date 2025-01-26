@@ -13,19 +13,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
+
 <body>
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand text-white" href="index.jsp">E-Commerce</a>
+        <a class="navbar-brand text-white" href="index.jsp">KIDDS</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-white active" href="product_list.jsp">Shop</a>
+                <!-- Shop Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Shop
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+                        <li><a class="dropdown-item" href="product_list.jsp">All Products</a></li>
+                        <li><a class="dropdown-item" href="products.jsp">Products</a></li>
+                        <li><a class="dropdown-item" href="orders.jsp">Orders</a></li>
+                        <li><a class="dropdown-item" href="order_history.jsp">Order Details</a></li>
+                        <li><a class="dropdown-item" href="category.jsp">Category</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
@@ -33,18 +44,17 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
 
-                        <li><a class="dropdown-item" href="category.jsp?category=electronics">Electronics</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=clothing">Clothing</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=home-kitchen">Home & Kitchen</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=jewelry">Jewelry & Accessories</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=beauty">Beauty & Health</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=baby">Baby items</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=women">Women</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=men">Men</a></li>
-                        <li><a class="dropdown-item" href="category.jsp?category=bags">Bags</a></li>
+                        <li><a class="dropdown-item" href="baby.jsp"> Baby Items</a></li>
+                        <li><a class="dropdown-item" href="toys.jsp">Toys</a></li>
+                        <li><a class="dropdown-item" href="clothing.jsp">Clothing</a></li>
+                        <li><a class="dropdown-item" href="jewelry.jsp">Feeding</a></li>
+                        <li><a class="dropdown-item" href="beauty.jsp">Diapers </a></li>
+                        <li><a class="dropdown-item" href="nursery.jsp">Nursery </a></li>
+                        <li><a class="dropdown-item" href="safety.jsp">Health & Safety</a></li>
 
                     </ul>
                 </li>
+
             </ul>
             <form class="d-flex me-2">
                 <input class="form-control me-2" type="search" placeholder="Search for products..." aria-label="Search">
@@ -56,8 +66,8 @@
                 <li class="nav-item"><a class="nav-link text-white" href="settings.jsp">Settings</a></li>
             </ul>
             <!-- Add a Login Button -->
-            <div class="text-center my-4">
-                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <div  class="text-center my-4" >
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#loginModal" >
                     Login
                 </button>
             </div>
@@ -84,7 +94,7 @@
                                     <input type="checkbox" class="form-check-input" id="rememberMe">
                                     <label class="form-check-label" for="rememberMe">Remember me</label>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100">LOGIN</button>
+                                <button type="submit" class="btn btn-primary w-100"><a class="nav-link text-white" href="home.jsp">Login</a></button>
 
 
                             </form>
