@@ -1,4 +1,4 @@
-<b>E-Commerce Web Application</b
+<b>E-Commerce Web Application</b>
 
 Project Description:
 This project is a comprehensive, full-featured e-commerce web application designed to provide a seamless shopping experience for customers and robust management tools for administrators. Developed using JavaEE, JDBC connection pooling, and JSP, the application adheres to a layered architecture for maintainability and scalability. It offers a range of functionalities catering to the needs of modern e-commerce platforms.
