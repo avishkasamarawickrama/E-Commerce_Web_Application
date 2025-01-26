@@ -5,186 +5,122 @@
   Time: 3:08 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.text.DecimalFormat"%>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="resources/css/bootstrap.min.css">
-  <link rel="stylesheet" href="resources/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <style>
-    /* General Page Styling */
     body {
-      font-family: Arial, sans-serif;
       background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
     }
-
-    /* Header Styling */
-    header {
-      background: linear-gradient(90deg, #4caf50, #087f23);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    .cart-header {
+      margin-bottom: 20px;
     }
-
-    /* Shopping Cart Table */
     .cart-table {
       background-color: #ffffff;
-      border-radius: 8px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
-    .cart-table th {
-      background-color: #4caf50;
-      color: #ffffff;
-      text-align: center;
-      padding: 10px;
-    }
-
-    .cart-table td {
-      text-align: center;
+    .cart-table th, .cart-table td {
       vertical-align: middle;
-      padding: 10px;
+      text-align: center;
     }
-
-    .cart-table img {
-      max-width: 100px;
-      height: auto;
-      border-radius: 5px;
+    .cart-actions button {
+      margin: 0 5px;
     }
-
-    /* Buttons */
-    .btn-primary {
-      background-color: #4caf50;
+    .checkout-btn {
+      background-color: #007bff;
+      color: #ffffff;
       border: none;
     }
-
-    .btn-primary:hover {
-      background-color: #087f23;
+    .checkout-btn:hover {
+      background-color: #0056b3;
     }
-
-    .btn-danger {
-      background-color: #dc3545;
-    }
-
-    .btn-danger:hover {
-      background-color: #c82333;
-    }
-
-    .btn-success {
-      background-color: #28a745;
-    }
-
-    .btn-success:hover {
-      background-color: #218838;
-    }
-
-    .btn-secondary {
-      background-color: #6c757d;
-    }
-
-    .btn-secondary:hover {
-      background-color: #5a6268;
-    }
-
-    /* Forms */
-    input[type="number"] {
+    .empty-cart {
+      margin-top: 50px;
       text-align: center;
+      color: #6c757d;
     }
-
-    /* Total Section */
-    .text-end h4 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #333333;
+    .empty-cart a {
+      text-decoration: none;
+      color: #007bff;
     }
-
+    .empty-cart a:hover {
+      color: #0056b3;
+    }
   </style>
 </head>
 <body>
 
+<jsp:include page="navbar.jsp" />
+
+<div class="container mt-5">
+  <h1 class="text-center cart-header">Shopping Cart</h1>
+  <hr>
 
 
-<jsp:include page="navbar.jsp"/>
+  <div class="table-responsive cart-table">
+    <table class="table table-bordered">
+      <thead class="table-dark">
+      <tr>
+        <th>Product</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
 
-<header class="bg-dark text-white py-3 text-center">
-  <h1>Your Shopping Cart</h1>
-</header>
+      <tr>
 
-<div class="container my-5">
-  <%
-    // Simulate a session-based cart (in a real application, this would be stored in the session)
-    ArrayList<HashMap<String, String>> cart = (ArrayList<HashMap<String, String>>) session.getAttribute("cart");
-    if (cart == null) {
-      cart = new ArrayList<>();
-      session.setAttribute("cart", cart);
-    }
+          <form action="UpdateCartServlet" method="post" class="d-inline">
+            <input type="hidden" name="productId" >
+            <input type="number" name="quantity"  min="1" max="99" class="form-control w-50 mx-auto">
+            <button type="submit" class="btn btn-sm btn-success mt-1">Update</button>
+          </form>
+        </td>
+        <td></td>
+        <td class="cart-actions">
+          <form action="RemoveFromCartServlet" method="post" class="d-inline">
+            <input type="hidden" name="productId" >
+            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+          </form>
+        </td>
+      </tr>
 
-    double total = 0.0;
-
-    if (cart.isEmpty()) {
-  %>
-  <div class="alert alert-warning text-center">
-    Your cart is empty. <a href="product_list.jsp" class="alert-link">Continue shopping</a>.
+      </tbody>
+      <tfoot>
+      <tr>
+        <th colspan="4" class="text-end">Total:</th>
+        <th></th>
+        <th></th>
+      </tr>
+      </tfoot>
+    </table>
   </div>
-  <% } else { %>
-  <table class="table table-bordered cart-table">
-    <thead>
-    <tr>
-      <th>Image</th>
-      <th>Product</th>
-      <th>Price</th>
-      <th>Quantity</th>
-      <th>Subtotal</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%
-      for (HashMap<String, String> item : cart) {
-        String productName = item.get("name");
-        String productImage = item.get("image");
-        double productPrice = Double.parseDouble(item.get("price"));
-        int productQuantity = Integer.parseInt(item.get("quantity"));
-        double subtotal = productPrice * productQuantity;
 
-        total += subtotal;
-    %>
-    <tr>
-      <td><img src="<%= productImage %>" alt="<%= productName %>"></td>
-      <td><%= productName %></td>
-      <td>$<%= String.format("%.2f", productPrice) %></td>
-      <td>
-        <form method="post" action="update_cart.jsp">
-          <input type="hidden" name="productName" value="<%= productName %>">
-          <input type="number" name="quantity" value="<%= productQuantity %>" min="1" class="form-control" style="width: 80px;">
-          <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
-        </form>
-      </td>
-      <td>$<%= String.format("%.2f", subtotal) %></td>
-      <td>
-        <a href="remove_from_cart.jsp?productName=<%= productName %>" class="btn btn-danger btn-sm">Remove</a>
-      </td>
-    </tr>
-    <% } %>
-    </tbody>
-  </table>
-  <div class="text-end">
-    <h4>Total: $<%= String.format("%.2f", total) %></h4>
-    <a href="checkout.jsp" class="btn btn-success btn-lg">Proceed to Checkout</a>
-    <a href="product_list.jsp" class="btn btn-secondary btn-lg">Continue Shopping</a>
+  <div class="d-flex justify-content-between mt-3">
+    <a href="products.jsp" class="btn btn-outline-primary">Continue Shopping</a>
+    <a href="checkout.jsp" class="btn checkout-btn">Proceed to Checkout</a>
   </div>
-  <% } %>
+
 </div>
-
 <jsp:include page="footer.jsp" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="resources/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
